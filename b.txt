@@ -1,0 +1,3 @@
+add file b.txt 2018.10.11.21:01
+second commit --amend b.txt 2018.10.11.21:03
+
