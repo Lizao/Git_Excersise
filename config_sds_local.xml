@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config_sds_local>
+    <handles>
+        <handle type="H_CREATE_SESSION">
+            <check type="C_PARAM_VALID">
+                <case name="PARAM_VALID">
+                    <action type="A_CLOSE_SESSION" param="PARAM_VALID" />
+                    <action type="A_REPLY_SESSIONRESULT" param="PARAM_VALID"/>
+                    <action type="A_UPDATE_TIMER" />
+                    <action type="A_CHANGE_ICON_STATE" param="ICON_IDLE" />
+                    <action type="A_TRANSFER" param="S_IDLE" />
+                </case>
+                <case name="PARAM_INVALID">
+                    <action type="A_REPLY_SESSIONRESULT" param="PARAM_INVALID"/>
+                </case>
+                <default name="DEFAULT">
+                </default>
+            </check>
+        </handle>
+
+        <handle type="H_CLOSE_SESSION">
+            <check type="C_SESSION_VALID">
+                <case name="SESSION_VALID">
+                    <action type="A_CHANGE_ICON_STATE" param="ICON_IDLE" />
+                    <action type="A_CLOSE_SESSION" param="SESSION_VALID" />
+                    <action type="A_TRANSFER" param="S_IDLE" />
+                </case>
+                <case name="SESSION_INVALID">
+                    <action type="A_CLOSE_SESSION" param="SESSION_INVALID" />
+                </case>
+                <default name="DEFAULT">
+                </default>
+            </check>
+        </handle>
+
+        <handle type="H_TIMEOUT">
+            <check type="C_SESSION_VALID">
+                <case name="SESSION_VALID">
+                    <action type="A_CHANGE_ICON_STATE" param="ICON_IDLE" />
+                    <action type="A_CLOSE_SESSION" param="TIMEOUT" />
+                </case>
+                <default name="DEFAULT">
+                </default>
+            </check>
+        </handle>
+
+        <handle type="H_HTML_MIC">
+            <check type="C_SESSION_VALID">
+                <case name="SESSION_INVALID">
+                    <action type="A_REPLY_RECOGRESULT" param="SESSION_INVALID" />
+                </case>
+                <default>
+                    <action type="A_UPDATE_TIMER" />
+                    <action type="A_REPLY_RECOGRESULT" param="IN_RECOG" />
+                </default>
+            </check>
+        </handle>
+
+        <handle type="H_CANCEL">
+            <check type="C_SESSION_VALID">
+                <case name="SESSION_VALID">
+                    <action type="A_CHANGE_ICON_STATE" param="ICON_IDLE" />
+                    <action type="A_UPDATE_TIMER" />
+                    <action type="A_TRANSFER" param="S_IDLE" />
+                </case>
+                <default name="DEFAULT">
+                </default>
+            </check>
+        </handle>
+
+        <handle type="H_START_OVER">
+            <check type="C_DIALOG_STATE">
+                <case name="DIALOG_TRANSFERABLE">
+                    <action type="A_UPDATE_TIMER" />
+                    <action type="A_TRANSFER" param="S_START" />
+                </case>
+                <default name="DEFAULT">
+                </default>
+            </check>
+        </handle>
+
+        <handle type="H_EXIT">
+            <check type="C_SESSION_VALID">
+                <case name="SESSION_VALID">
+                    <action type="A_CHANGE_ICON_STATE" param="ICON_IDLE" />
+                    <action type="A_TRANSFER" param="S_IDLE" />
+                </case>
+                <default name="DEFAULT">
+                </default>
+            </check>
+        </handle>
+
+        <handle type="H_CLIENT_DISCONNECT">
+            <check type="C_CLIENT_DISCONNECT">
+                <case name="SESSION_VALID">
+                    <action type="A_CHANGE_ICON_STATE" param="ICON_IDLE" />
+                    <action type="A_CLOSE_SESSION" param="CLIENT_DISCONNECT" />
+                    <action type="A_TRANSFER" param="S_IDLE" />
+                </case>
+                <case name="SESSION_INVALID">
+                </case>
+                <default name="DEFAULT">
+                </default>
+            </check>
+        </handle>
+
+        <handle type="H_TIMEOUT_HANDLER">
+            <check type="C_SESSION_VALID">
+                <case name="SESSION_VALID">
+                    <action type="A_CHANGE_ICON_STATE" param="ICON_IDLE" />
+                    <action type="A_TRANSFER" param="S_VR_EXIT_DIRECTLY" />
+                </case>
+                <default name="DEFAULT">
+                </default>
+            </check>
+        </handle>
+
+        <handle type="H_MIC">
+            <check type="C_SESSION_VALID">
+                <case name="SESSION_VALID">
+                    <action type="A_STOP_REQUEST"/>
+                </case>
+                <default name="DEFAULT">
+                </default>
+            </check>
+        </handle>
+
+        <handle type="H_HTML_CANCEL_TTS">
+            <check type="C_SESSION_VALID">
+                <case name="SESSION_VALID">
+                    <action type="A_STOP_REQUEST"/>
+                </case>
+                <default name="DEFAULT">
+                </default>
+            </check>
+        </handle>
+
+    </handles>
+
+    <scenes>
+        <scene name="S_IDLE">
+            <handles>
+                <handle type="H_MIC">
+                    <check type="C_SESSION_VALID">
+                        <case name="SESSION_VALID">
+                            <action type="A_TRANSFER" param="S_START" />
+                        </case>
+                        <case name="SESSION_INVALID">
+                        </case>
+                        <default name="DEFAULT">
+                        </default>
+                    </check>
+                </handle>
+
+                <handle type="H_HTML_MIC">
+                    <check type="C_SESSION_VALID">
+                        <case name="SESSION_INVALID">
+                            <action type="A_REPLY_RECOGRESULT" param="SESSION_INVALID" />
+                        </case>
+                        <default name="DEFAULT">
+                        </default>
+                    </check>
+
+                    <check type="C_LANGUAGE_VALID">
+                        <case name="LANGUAGE_VALID">
+                            <action type="A_UPDATE_TIMER" />
+                            <action type="A_SET_SESSION_TO_STATE" />
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_IDLE" />
+                            <action type="A_TRANSFER" param="S_HTML" />
+                        </case>
+                        <case name="LANGUAGE_INVALID">
+                            <action type="A_REPLY_RECOGRESULT" param="LANGUAGE_INVALID" />
+                        </case>
+                        <default name="DEFAULT">
+                        </default>
+                    </check>
+                </handle>
+
+                <handle type="H_CHANGE_LANGUAGE">
+                    <check type="C_CHANGE_LANGUAGE">
+                        <default name="DEFAULT">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_IDLE" />
+                            <action type="A_CLOSE_SESSION" param="IN_CHANGE_LANGUAGE" />
+                            <action type="A_SAVE_TRANSFE_DATA"/>
+                            <action type="A_TRANSFER" param="S_CHANGELANGUAGE" />
+                        </default>
+                    </check>
+
+                </handle>
+            </handles>
+        </scene>
+
+        <scene name="S_START">
+            <action type="A_DISPLAY_HINT"/>
+            <action type="A_DISPLAY_PROMPT" param="RES_27" info="POSITION_UPPER_RIGHT"/>
+            <action type="A_CHANGE_ICON_STATE" param="ICON_BEEP" />
+            <action type="A_BEEP" param="15" handletype="H_BEEP" checktype="C_BEEP_RESULT"/>
+            <handles>
+                <handle type="H_TTS">
+                    <check type="C_TTS_RESULT">
+                        <default name="BEEP">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_BEEP" />
+                            <action type="A_BEEP" param="15" handletype="H_BEEP" checktype="C_BEEP_RESULT"/>
+                        </default>
+                    </check>
+                </handle>
+
+                <handle type="H_BEEP">
+                    <check type="C_BEEP_RESULT">
+                        <default name="VR">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_SPEECH" />
+                            <action type="A_VR" param="main" handletype="H_VR" checktype="NULL"/>
+                        </default>
+                    </check>
+                </handle>
+
+                <handle type="H_VR">
+                    <check type="C_VR_SPEECH_END" >
+                        <case name="VR_SPEECH_END">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_BUSY" />
+                        </case>
+                        <default name="VR_OK">
+                        </default>
+                    </check>
+
+                    <check type="C_VR_RESULT" param="2">
+                        <case name="RECOG_ERROR">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_TTS" />
+                            <action type="A_TTS_RETRY" param="RES_26" handletype="H_TTS" checktype="C_TTS_RESULT"/>
+                        </case>
+                        <case name="RECOG_TIMEOUT">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_TTS" />
+                            <action type="A_TTS_RETRY" param="RES_26" handletype="H_TTS" checktype="C_TTS_RESULT"/>
+                        </case>
+                        <case name="CONSECUTIVE_ERRORS">
+                            <action type="A_TRANSFER" param="S_VR_CANCEL" />
+                        </case>
+                        <default name="VR_OK">
+                        </default>
+                    </check>
+
+                    <check type="C_VR_RESULT_COMMON">
+                        <case name="REPEAT">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_TTS" />
+                            <action type="A_TTS_RETRY" param="RES_112" handletype="H_TTS" checktype="C_TTS_RESULT"/>
+                        </case>
+                        <case name="CANCEL">
+                            <action type="A_TRANSFER" param="S_VR_CANCEL" />
+                        </case>
+                        <case name="SYSTEM_HELP">
+                            <action type="A_SHOW_VIEW" param="SYSTEM_HELP" />
+                            <action type="A_TRANSFER" param="S_VR_STOP" />
+                        </case>
+                        <case name="MUSIC_HELP">
+                            <action type="A_SHOW_VIEW" param="MUSIC_HELP" />
+                            <action type="A_TRANSFER" param="S_VR_STOP" />
+                        </case>
+                        <case name="NAVI_HELP">
+                            <action type="A_SHOW_VIEW" param="NAVI_HELP" />
+                            <action type="A_TRANSFER" param="S_VR_STOP" />
+                        </case>
+                        <case name="PHONE_HELP">
+                            <action type="A_SHOW_VIEW" param="PHONE_HELP" />
+                            <action type="A_TRANSFER" param="S_VR_STOP" />
+                        </case>
+                        <case name="BACK">
+                            <action type="A_TRANSFER" param="S_VR_CANCEL" />
+                            <!--action type="A_BACK"/-->
+                        </case>
+                        <default name="VR_OK">
+                        </default>
+                    </check>
+
+                    <check type="C_VR_RESULT_PARSER">
+                        <case name="GO_HOME">
+                            <action type="A_TRANSFER" param="S_HOME" />
+                        </case>
+                        <case name="GO_COMPANY">
+                            <action type="A_TRANSFER" param="S_CORPORATION" />
+                        </case>
+                        <case name="SEARCH_ADDR">
+                            <action type="A_TRANSFER" param="S_SEARCH_ADDR" />
+                        </case>
+                        <case name="SEARCH_FACILITY_ONLINE">
+                            <action type="A_TRANSFER" param="S_SEARCH_FACILITY_ONLINE" />
+                        </case>
+                        <case name="SEARCH_SPECPOI">
+                            <action type="A_TRANSFER" param="S_SEARCH_POI_PLACE_SELECT" />
+                        </case>
+                        <case name="SEARCH_SPECADDR">
+                            <action type="A_TRANSFER" param="S_SEARCH_ADDR_PLACE_SELECT" />
+                        </case>
+                        <case name="SEARCH_POI">
+                            <action type="A_TRANSFER" param="S_SEARCH_POI" />
+                        </case>
+                        <case name="SEARCH_FACILITY">
+                            <action type="A_TRANSFER" param="S_SEARCH_FACILITY" />
+                        </case>
+                        <case name="SEARCH_FACILITY_NEAR_DESTINATION">
+                            <action type="A_TRANSFER" param="S_SEARCH_FACILITY_NEAR_DESTINATION" />
+                        </case>
+                        <case name="SEARCH_FACILITY_NEAR_REGISTERED_POI">
+                            <action type="A_TRANSFER" param="S_SEARCH_FACILITY_NEAR_REGISTERED_POINT" />
+                        </case>
+                        <case name="REMAINING_DISTANCE">
+                            <action type="A_TRANSFER" param="S_GET_REMAINING_DISTANCE" />
+                        </case>
+                        <case name="REMAINING_TIME">
+                            <action type="A_TRANSFER" param="S_GET_REMAINING_TIME" />
+                        </case>
+                        <case name="SHOW_FAVORITES">
+                            <action type="A_TRANSFER" param="S_SHOW_FAVORITE" />
+                        </case>
+                        <case name="SHOW_WHOLE_ROUTE">
+                            <action type="A_TRANSFER" param="S_SHOW_WHOLE_ROUTE" />
+                        </case>
+                        <case name="SHOW_DESTINATION">
+                            <action type="A_TRANSFER" param="S_SHOW_DESTINATION" />
+                        </case>
+                        <case name="SHOW_DESTIONATION_HISTORY">
+                            <action type="A_TRANSFER" param="S_SHOW_DESTIONATION_HISTORY" />
+                        </case>
+                        <case name="SHOW_CURRENT_POSITION">
+                            <action type="A_TRANSFER" param="S_SHOW_CURRENT_POSITION" />
+                        </case>
+                        <case name="SHOW_POI_POSITION">
+                            <action type="A_TRANSFER" param="S_SHOW_POI_POSITION" />
+                        </case>
+                        <case name="FIND_POSTAL_CODE">
+                            <action type="A_TRANSFER" param="S_POSTAL_CODE" />
+                        </case>
+                        <case name="CALL_CONTACT">
+                            <action type="A_TRANSFER" param="S_CALL_CONTACT" />
+                        </case>
+                        <case name="CALL_PHONETYPE">
+                            <action type="A_TRANSFER" param="S_CALL_PHONETYPE" />
+                        </case>
+                        <case name="CALL_NUM">
+                            <action type="A_TRANSFER" param="S_CALL_NUM" />
+                        </case>
+                        <case name="LIST_RECENT_CALL">
+                            <action type="A_TRANSFER" param="S_LIST_RECENT_CALL" />
+                        </case>
+                        <case name="LIST_MISSED_CALL">
+                            <action type="A_TRANSFER" param="S_LIST_RECENT_CALL" />
+                        </case>
+                        <case name="CHANGE_SOURCE">
+                            <action type="A_TRANSFER" param="S_CHANGE_SOURCE" />
+                        </case>
+                        <case name="CHANGE_SOURCE_NAME">
+                            <action type="A_TRANSFER" param="S_CHANGE_SOURCE_NAME" />
+                        </case>
+                        <case name="SOURCEOFF">
+                            <action type="A_TRANSFER" param="S_SOURCEOFF" />
+                        </case>
+                        <case name="SOURCE_NAME_OFF">
+                            <action type="A_TRANSFER" param="S_SOURCE_NAME_OFF" />
+                        </case>
+                        <case name="SHUFFLE">
+                            <action type="A_TRANSFER" param="S_SHUFFLE" />
+                        </case>
+                        <case name="SINGLE_LOOP">
+                            <action type="A_TRANSFER" param="S_SINGLE_LOOP" />
+                        </case>
+                        <case name="SEQUENCE_LOOP">
+                            <action type="A_TRANSFER" param="S_SEQUENCE_LOOP" />
+                        </case>
+                        <case name="SEQUENCE">
+                            <action type="A_TRANSFER" param="S_SEQUENCE" />
+                        </case>
+                        <case name="LOOP">
+                            <action type="A_TRANSFER" param="S_LOOP" />
+                        </case>
+                        <case name="PLAY">
+                            <action type="A_TRANSFER" param="S_PLAY" />
+                        </case>
+                        <case name="PLAY_SONG">
+                            <action type="A_TRANSFER" param="S_PLAY_SONG" />
+                        </case>
+                        <case name="PLAY_ALBUM">
+                            <action type="A_TRANSFER" param="S_PLAY_ALBUM" />
+                        </case>
+                        <case name="PLAY_ARTIST">
+                            <action type="A_TRANSFER" param="S_PLAY_ARTIST" />
+                        </case>
+                        <case name="PLAY_GENRE">
+                            <action type="A_TRANSFER" param="S_PLAY_GENRE" />
+                        </case>
+                        <case name="PLAY_PLAYLIST">
+                            <action type="A_TRANSFER" param="S_PLAY_PLAYLIST" />
+                        </case>
+                        <case name="PAUSE">
+                            <action type="A_TRANSFER" param="S_PAUSE" />
+                        </case>
+                        <case name="NEXT">
+                            <action type="A_TRANSFER" param="S_NEXT" />
+                        </case>
+                        <case name="PREVIOUS">
+                            <action type="A_TRANSFER" param="S_PREVIOUS" />
+                        </case>
+                        <case name="START_APP">
+                            <action type="A_TRANSFER" param="S_START_APP" />
+                        </case>
+                        <case name="CLOSE_APP">
+                            <action type="A_TRANSFER" param="S_CLOSE_APP" />
+                        </case>
+                        <case name="BT_ON">
+                            <action type="A_TRANSFER" param="S_BT_ON" />
+                        </case>
+                        <case name="BT_OFF">
+                            <action type="A_TRANSFER" param="S_BT_OFF" />
+                        </case>
+                        <case name="BTSETTING_ON">
+                            <action type="A_TRANSFER" />
+                        </case>
+                        <case name="BTSETTING_OFF">
+                            <action type="A_TRANSFER" />
+                        </case>
+                        <case name="WIFI_ON">
+                            <action type="A_TRANSFER" param="S_WIFI_ON" />
+                        </case>
+                        <case name="WIFI_OFF">
+                            <action type="A_TRANSFER" param="S_WIFI_OFF" />
+                        </case>
+                        <case name="WIFISETTING_ON">
+                            <action type="A_TRANSFER" />
+                        </case>
+                        <case name="WIFISETTING_OFF">
+                            <action type="A_TRANSFER" />
+                        </case>
+                        <case name="CANCEL_NAVIGATION">
+                            <action type="A_TRANSFER" param="S_CANCEL_NAVIGATION" />
+                        </case>
+                        <case name="VOLUME_MUTE">
+                            <action type="A_TRANSFER" param="S_VOLUME_MUTE" />
+                        </case>
+                        <case name="VOLUME_INCREASE">
+                            <action type="A_TRANSFER" param="S_VOLUME_INCREASE" />
+                        </case>
+                        <case name="VOLUME_DECREASE">
+                            <action type="A_TRANSFER" param="S_VOLUME_DECREASE" />
+                        </case>
+                        <case name="VOLUME_TURN">
+                            <action type="A_TRANSFER" param="S_VOLUME_TURN" />
+                        </case>
+                        <case name="BACK_TO_MAP">
+                            <action type="A_TRANSFER" param="S_BACK_TO_MAP" />
+                        </case>
+                        <case name="ADD_POINT_NORMAL">
+                            <action type="A_TRANSFER" param="S_ADD_CURRENT_POINT" />
+                        </case>
+                        <case name="ADD_POINT_HOME">
+                            <action type="A_TRANSFER" param="S_ADD_CURRENT_POINT" />
+                        </case>
+                        <case name="ADD_POINT_OFFICE">
+                            <action type="A_TRANSFER" param="S_ADD_CURRENT_POINT" />
+                        </case>
+                        <case name="TRAFFIC_SWITCH_OPEN">
+                            <action type="A_TRANSFER" param="S_TRAFFIC_SWITCH" />
+                        </case>
+                        <case name="TRAFFIC_SWITCH_CLOSE">
+                            <action type="A_TRANSFER" param="S_TRAFFIC_SWITCH" />
+                        </case>
+                        <case name="MAP_ZOOM_IN">
+                            <action type="A_TRANSFER" param="S_ZOOM_MAP_VIEW" />
+                        </case>
+                        <case name="MAP_ZOOM_OUT">
+                            <action type="A_TRANSFER" param="S_ZOOM_MAP_VIEW" />
+                        </case>
+                        <case name="SWITCH_VIEW_MODE">
+                            <action type="A_TRANSFER" param="S_SWITCH_VIEW_MODE" />
+                        </case>
+                        <case name="SEARCH_ALONG_ROUTE">
+                            <action type="A_TRANSFER" param="S_SEARCH_ALONG_ROUTE" />
+                        </case>
+                        <case name="SEARCH_POI_NEARBY_FACILITY">
+                            <action type="A_TRANSFER" param="S_SEARCH_POI_NEARBY_FACILITY" />
+                        </case>
+                        <case name="REDIAL">
+                            <action type="A_TRANSFER" param="S_REDIAL" />
+                        </case>
+                        <case name="DIALBACK">
+                            <action type="A_TRANSFER" param="S_DIAL_BACK" />
+                        </case>
+                        <case name="QUERYWEATHER">
+                            <action type="A_TRANSFER" param="S_INFORMATION" />
+                        </case>
+                        <default name="VR_EXIT">
+                            <action type="A_TRANSFER" param="S_VR_EXIT_DIRECTLY" />
+                        </default>
+                    </check>
+                </handle>
+            </handles>
+        </scene>
+        <scene name="S_START_APP">
+            <handles>
+                <handle type="NULL">                    
+                    <case name="START_APP">
+                        <action type="A_DISPLAY_PROMPT" param="RES_85" info="POSITION_UPPER_RIGHT"/>
+                        <action type="A_CHANGE_ICON_STATE" param="ICON_TTS" />
+                        <action type="A_GET_PROMPTPARAM" />
+                        <action type="A_TTS" param="RES_85" handletype="H_TTS" checktype="C_TTS_RESULT"/>
+                    </case>           
+                </handle>
+                <handle type="H_TTS">
+                    <check type="C_TTS_NO_ITEM">
+                        <default name="TTS">
+                           <action type="A_TRANSFER" param="S_VR_EXIT_DIRECTLY" />
+                        </default>
+                    </check>
+
+                    <check type="C_TTS_RESULT">
+                        <default name="BEEP">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_BEEP" />
+                            <action type="A_BEEP" param="15" handletype="H_BEEP" checktype="C_BEEP_RESULT"/>
+                        </default>
+                    </check>
+                </handle>   
+                <handle type="H_VR">
+                    <check type="C_VR_SPEECH_END" >
+                        <case name="VR_SPEECH_END">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_BUSY" />
+                        </case>
+                        <default name="VR_OK">
+                        </default>
+                    </check>
+                    <check type="C_VR_RESULT" param="2">
+                        <case name="RECOG_ERROR">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_TTS" />
+                            <action type="A_TTS_RETRY" param="RES_26" handletype="H_TTS" checktype="C_TTS_RESULT"/>
+                        </case>
+                        <case name="RECOG_TIMEOUT">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_TTS" />
+                            <action type="A_TTS_RETRY" param="RES_26" handletype="H_TTS" checktype="C_TTS_RESULT"/>
+                        </case>
+                        <case name="CONSECUTIVE_ERRORS">
+                            <action type="A_TRANSFER" param="S_VR_CANCEL" />
+                        </case>
+                        <default name="VR_OK">
+                        </default>
+                    </check>
+                    <check type="C_VR_RESULT_COMMON">
+                        <case name="REPEAT">
+                            <action type="A_DISPLAY_REPEAT" param="LASTTTS" info="POSITION_UPPER_RIGHT"/>
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_TTS" />
+                            <action type="A_TTS_REPEAT" param="LASTTTS" handletype="LASTHANDLE" checktype="LASTCHECK"/>
+                        </case>
+                        <case name="CANCEL">
+                            <action type="A_TRANSFER" param="S_VR_CANCEL" />
+                        </case>
+                        <case name="BACK">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_BUSY" />
+                            <action type="A_BACK"/>
+                        </case>
+                        <default name="VR_OK">
+                        </default>
+                    </check>
+                </handle>
+            </handles>
+        </scene>
+        <scene name="S_CLOSE_APP">
+            <handles>
+                <handle type="NULL">                    
+                    <case name="CLOSE_APP">
+                        <action type="A_DISPLAY_PROMPT" param="RES_150" info="POSITION_UPPER_RIGHT"/>
+                        <action type="A_CHANGE_ICON_STATE" param="ICON_TTS" />
+                        <action type="A_GET_PROMPTPARAM" />
+                        <action type="A_TTS" param="RES_150" handletype="H_TTS" checktype="C_TTS_RESULT"/>
+                    </case>           
+                </handle>
+                <handle type="H_TTS">
+                    <check type="C_TTS_NO_ITEM">
+                        <default name="TTS">
+                           <action type="A_TRANSFER" param="S_VR_EXIT_DIRECTLY" />
+                        </default>
+                    </check>
+
+                    <check type="C_TTS_RESULT">
+                        <default name="BEEP">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_BEEP" />
+                            <action type="A_BEEP" param="15" handletype="H_BEEP" checktype="C_BEEP_RESULT"/>
+                        </default>
+                    </check>
+                </handle>   
+                <handle type="H_VR">
+                    <check type="C_VR_SPEECH_END" >
+                        <case name="VR_SPEECH_END">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_BUSY" />
+                        </case>
+                        <default name="VR_OK">
+                        </default>
+                    </check>
+                    <check type="C_VR_RESULT" param="2">
+                        <case name="RECOG_ERROR">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_TTS" />
+                            <action type="A_TTS_RETRY" param="RES_26" handletype="H_TTS" checktype="C_TTS_RESULT"/>
+                        </case>
+                        <case name="RECOG_TIMEOUT">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_TTS" />
+                            <action type="A_TTS_RETRY" param="RES_26" handletype="H_TTS" checktype="C_TTS_RESULT"/>
+                        </case>
+                        <case name="CONSECUTIVE_ERRORS">
+                            <action type="A_TRANSFER" param="S_VR_CANCEL" />
+                        </case>
+                        <default name="VR_OK">
+                        </default>
+                    </check>
+                    <check type="C_VR_RESULT_COMMON">
+                        <case name="REPEAT">
+                            <action type="A_DISPLAY_REPEAT" param="LASTTTS" info="POSITION_UPPER_RIGHT"/>
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_TTS" />
+                            <action type="A_TTS_REPEAT" param="LASTTTS" handletype="LASTHANDLE" checktype="LASTCHECK"/>
+                        </case>
+                        <case name="CANCEL">
+                            <action type="A_TRANSFER" param="S_VR_CANCEL" />
+                        </case>
+                        <case name="BACK">
+                            <action type="A_CHANGE_ICON_STATE" param="ICON_BUSY" />
+                            <action type="A_BACK"/>
+                        </case>
+                        <default name="VR_OK">
+                        </default>
+                    </check>
+                </handle>
+            </handles>
+        </scene>
+    </scenes>
+</config_sds_local>
