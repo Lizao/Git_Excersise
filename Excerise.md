@@ -17,18 +17,13 @@
 >
 >git fetch  #使用igerrit上面的cherrypick, 解决冲突,将conflict项add至暂存区
 >
->git cherrypick --continue #至此问题解决
+>git cherry-pick --continue #至此问题解决
 
-## 3.本地多次commit以至于push不到远程
-### 解决方案：
-使用
-## 待做实验
-
-## 4.第一次commit a,多次修改，最终形成 commit --amend(a)，在此基础上需要提交b,commit b ,多次修改，形成 commit --amend(b)，现在突然要对a进行修改，还想提交到commit --amend(a)，如何做到？做到后又如何切换到commit --amend(b)?
+ **git pull <远程主机名> <远程分支名> **
 
 
 
-## 5.在master分支修改A和B，现在需要对A添加新功能，使用创建分支以保证代码安全，步骤如下：
+## 3.在master分支修改A和B，现在需要对A添加新功能，使用创建分支以保证代码安全，步骤如下：
 
 > git checkout -b newA 创建新的分支newA
 >
@@ -45,3 +40,12 @@
 >git commit -m 后使用 git commit --amend 直接用git commit -- amend 会报错
 >
 >git push 至此问题解决完毕
+
+
+
+**上传代码前需要pull一下，merge过后再上传**
+
+
+
+
+https://www.cnblogs.com/dsxniubility/p/5817776.html
