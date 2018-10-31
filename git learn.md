@@ -10,7 +10,6 @@ git reset <hash Id>  #版本可切换到任意版本
 ### 解决方案：
 需要注意创建新的分支
 ```
-<<<<<<< HEAD
 git log --oneline -5       # 获取远程提交记录 hash Id
 git reset --hard <hash Id> # 切换到指定版本
 git pull                   #拉代码
@@ -18,7 +17,7 @@ git fetch                  #使用igerrit上面的cherrypick, 解决冲突,将co
 git cherry-pick --continue #至此问题解决
 ```
 ### 注： **git pull <远程主机名> <远程分支名> **
- 
+
 ## 3.在master分支修改A和B，现在需要对A添加新功能，使用创建分支以保证代码安全，步骤如下：
 
 ```
@@ -62,7 +61,7 @@ git  pull   从远程拉取最新版本到本地  自动合并merge
 git pull origin master
 git  fetch   从远程获取最新版本 到本地  不会自动合并 merge    
 git fetch  origin master git log  -p master ../origin/master  git merge orgin/master
-实际使用中  使用git fetch 更安全    在merge之前可以看清楚 更新情况  再决定是否合并
+实际使用中  使用git fetch 更安全，在merge之前可以看清楚，更新情况，再决定是否合并。
 ```
 
 ## [参考链接](https://www.cnblogs.com/dsxniubility/p/5817776.html)
