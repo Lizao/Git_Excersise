@@ -10,7 +10,6 @@ git reset <hash Id>  #版本可切换到任意版本
 ### 解决方案：
 需要注意创建新的分支
 ```
-<<<<<<< HEAD
 git log --oneline -5       # 获取远程提交记录 hash Id
 git reset --hard <hash Id> # 切换到指定版本
 git pull                   #拉代码
